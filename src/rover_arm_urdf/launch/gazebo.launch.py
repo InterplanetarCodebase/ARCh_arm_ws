@@ -1,4 +1,5 @@
 import os
+import xacro
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler
@@ -12,14 +13,15 @@ def generate_launch_description():
     arm_description_dir = get_package_share_directory("rover_arm_urdf")
     ros_gz_sim_dir = get_package_share_directory("ros_gz_sim")
 
-    # Path to the plain URDF file (no xacro processing needed)
-    urdf_file_path = os.path.join(arm_description_dir, "urdf", "rover_arm_urdf.urdf")
+    # Gazebo-specific xacro: includes the plain URDF and adds the
+    # ros2_control/gz_ros2_control blocks on top of it, so the plain URDF
+    # (also used by MoveIt and display.launch.py) can stay Gazebo-agnostic.
+    urdf_file_path = os.path.join(arm_description_dir, "urdf", "rover_arm_urdf_gazebo.urdf.xacro")
 
     controllers_yaml_path = os.path.join(arm_description_dir, "config", "ros2_controllers.yaml")
 
     def get_urdf_content():
-        with open(urdf_file_path, 'r') as file:
-            content = file.read()
+        content = xacro.process_file(urdf_file_path).toxml()
         # gz_ros2_control needs a real filesystem path here, not a
         # package:// URI (it doesn't resolve those), so swap in the
         # actual resolved path at launch time.

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <!-- Table top surface sits at z = 0.33 when the model is placed at
+       ground level. -->
+  <model name="typing_table">
+    <static>true</static>
+    <link name="top">
+      <pose>0 0 0.165 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.6 0.9 0.33</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.6 0.9 0.33</size></box>
+        </geometry>
+        <material>
+          <ambient>0.45 0.32 0.18 1</ambient>
+          <diffuse>0.45 0.32 0.18 1</diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

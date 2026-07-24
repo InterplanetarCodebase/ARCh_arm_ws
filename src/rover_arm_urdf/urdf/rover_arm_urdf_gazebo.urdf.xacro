@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover_arm_urdf">
+
+  <xacro:include filename="$(find rover_arm_urdf)/urdf/rover_arm_urdf.urdf" />
+
+  <!-- ros2_control block: exposes each joint as a command/state interface
+       that controller_manager (loaded via the gz_ros2_control plugin below)
+       can actually read from and write to. Without this, Gazebo has no idea
+       these joints are meant to be actively controlled, so gravity just
+       collapses them. Kept out of the plain rover_arm_urdf.urdf so that
+       MoveIt (which includes that file too) doesn't also try to load the
+       Gazebo hardware plugin outside of Gazebo. -->
+  <ros2_control name="RoverArmSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="joint_1_base_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint_2_shoulder_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint_3_elbow_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint_4_wrist_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint_5_wrist_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint_6_left_jaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <!-- joint_7_right_jaw is intentionally left out: it's a mimic joint,
+         driven off joint_6_left_jaw, not an independent controllable DOF. -->
+  </ros2_control>
+
+  <!-- Wrist RGB-D camera sensor. Requires the gz-sim "sensors" system
+       plugin to be loaded in the world SDF, otherwise nothing renders.
+       Topics come out on gz transport as wrist_camera/image,
+       wrist_camera/depth_image, wrist_camera/camera_info and
+       wrist_camera/points; ros_gz bridges them into ROS in the typing
+       launch file. -->
+  <gazebo reference="wrist_camera_link">
+    <sensor name="wrist_camera" type="rgbd_camera">
+      <topic>wrist_camera</topic>
+      <update_rate>15</update_rate>
+      <always_on>true</always_on>
+      <camera>
+        <horizontal_fov>1.0472</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>960</height>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>3.0</far>
+        </clip>
+        <depth_camera>
+          <clip>
+            <near>0.05</near>
+            <far>3.0</far>
+          </clip>
+        </depth_camera>
+        <optical_frame_id>wrist_camera_optical_frame</optical_frame_id>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <!-- Tells Gazebo Harmonic to load the gz_ros2_control plugin, which spins
+       up controller_manager inside the simulation and connects it to the
+       ros2_control block above. gazebo.launch.py substitutes the
+       placeholder below with the real resolved path at launch time, since
+       gz_ros2_control doesn't resolve package:// URIs. -->
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>__ROS2_CONTROLLERS_YAML_PATH__</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

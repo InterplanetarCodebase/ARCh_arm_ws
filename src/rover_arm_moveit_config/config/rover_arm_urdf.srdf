@@ -62,4 +62,12 @@
     <disable_collisions link1="link_5_gripper_base" link2="link_6_left_jaw" reason="Adjacent"/>
     <disable_collisions link1="link_5_gripper_base" link2="link_7_right_jaw" reason="Adjacent"/>
     <disable_collisions link1="link_6_left_jaw" link2="link_7_right_jaw" reason="Default"/>
+    <disable_collisions link1="wrist_camera_link" link2="link_4_wrist_pitch_block" reason="Adjacent"/>
+    <disable_collisions link1="wrist_camera_link" link2="link_3_forearm" reason="Never"/>
+    <disable_collisions link1="wrist_camera_link" link2="link_5_gripper_base" reason="Never"/>
+    <disable_collisions link1="wrist_camera_link" link2="link_6_left_jaw" reason="Never"/>
+    <disable_collisions link1="wrist_camera_link" link2="link_7_right_jaw" reason="Never"/>
+    <disable_collisions link1="wrist_camera_link" link2="link_2_upper_arm" reason="Never"/>
+    <disable_collisions link1="wrist_camera_link" link2="link_1_shoulder" reason="Never"/>
+    <disable_collisions link1="wrist_camera_link" link2="base_link" reason="Never"/>
 </robot>

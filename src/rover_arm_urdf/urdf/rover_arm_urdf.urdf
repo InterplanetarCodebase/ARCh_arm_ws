@@ -242,58 +242,50 @@
 <limit lower="-0.08" upper="0" effort="60" velocity="0.1"/>
 </joint>
 
-<!-- ros2_control block: exposes each joint as a command/state interface
-     that controller_manager (loaded via the gz_ros2_control plugin below)
-     can actually read from and write to. Without this, Gazebo has no idea
-     these joints are meant to be actively controlled, so gravity just
-     collapses them. -->
-<ros2_control name="RoverArmSystem" type="system">
-  <hardware>
-    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-  </hardware>
-  <joint name="joint_1_base_roll">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-  <joint name="joint_2_shoulder_pitch">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-  <joint name="joint_3_elbow_pitch">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-  <joint name="joint_4_wrist_pitch">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-  <joint name="joint_5_wrist_roll">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-  <joint name="joint_6_left_jaw">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-  <!-- joint_7_right_jaw is intentionally left out: it's a mimic joint,
-       driven off joint_6_left_jaw, not an independent controllable DOF. -->
-</ros2_control>
+<!-- Wrist-mounted RGB-D camera. Sits on top of the wrist pitch block,
+     looking along the tool axis (+Z of link_4), so it faces the keyboard
+     whenever the tool points down at it. Body frame follows the ROS
+     convention (X forward, Z up); the pitch of -90deg about Y turns the
+     camera's forward X axis onto link_4's +Z tool axis. -->
+<link name="wrist_camera_link">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <box size="0.03 0.06 0.02"/>
+    </geometry>
+    <material name="">
+      <color rgba="0.15 0.15 0.15 1"/>
+    </material>
+  </visual>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.03"/>
+    <inertia ixx="1e-05" ixy="0" ixz="0" iyy="1e-05" iyz="0" izz="1e-05"/>
+  </inertial>
+</link>
+<joint name="wrist_camera_joint" type="fixed">
+  <origin xyz="0.06 0 0.015" rpy="0 -1.5708 0"/>
+  <parent link="link_4_wrist_pitch_block"/>
+  <child link="wrist_camera_link"/>
+</joint>
 
-<!-- Tells Gazebo Harmonic to load the gz_ros2_control plugin, which spins
-     up controller_manager inside the simulation and connects it to the
-     ros2_control block above. gazebo_launch.py substitutes the
-     placeholder below with the real resolved path at launch time, since
-     gz_ros2_control doesn't resolve package:// URIs. -->
-<gazebo>
-  <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-    <parameters>__ROS2_CONTROLLERS_YAML_PATH__</parameters>
-  </plugin>
-</gazebo>
+<!-- Optical frame per ROS convention: Z forward (out of the lens),
+     X right, Y down. Perception nodes work in this frame. -->
+<link name="wrist_camera_optical_frame"/>
+<joint name="wrist_camera_optical_joint" type="fixed">
+  <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+  <parent link="wrist_camera_link"/>
+  <child link="wrist_camera_optical_frame"/>
+</joint>
+
+<!-- Tool tip: the point of the closed jaws, used as the IK target for
+     key presses and by the key-press validator. Jaw base sits at
+     z=0.07325 on link_5; the jaws extend roughly another 5 cm. -->
+<link name="tool_tip"/>
+<joint name="tool_tip_joint" type="fixed">
+  <origin xyz="0 0 0.123" rpy="0 0 0"/>
+  <parent link="link_5_gripper_base"/>
+  <child link="tool_tip"/>
+</joint>
 
 </robot>

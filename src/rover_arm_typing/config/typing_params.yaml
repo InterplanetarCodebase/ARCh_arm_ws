@@ -1,0 +1,33 @@
+keyboard_detector:
+  ros__parameters:
+    use_sim_time: true
+    image_topic: /wrist_camera/image
+    depth_topic: /wrist_camera/depth_image
+    info_topic: /wrist_camera/camera_info
+    base_frame: base_link
+    camera_frame: ''            # '' = trust the image header frame_id
+    stable_frames: 5
+    depth_min: 0.15
+    depth_max: 2.5
+
+typing_controller:
+  ros__parameters:
+    use_sim_time: true
+    # Joint-space pose the arm scans the keyboard from
+    # [base_roll, shoulder_pitch, elbow_pitch, wrist_pitch, wrist_roll].
+    scan_pose: [0.0, 0.35, 0.85, 1.57, 0.0]
+    hover_height: 0.06          # m above the key before/after a press
+    press_clearance: 0.004      # m above the key surface at full press
+    dwell_sec: 0.4
+    max_joint_vel: 0.8          # rad/s used to scale move durations
+    min_move_sec: 0.6
+    key_map_timeout: 30.0
+
+key_press_validator:
+  ros__parameters:
+    use_sim_time: true
+    base_frame: base_link
+    tip_frame: tool_tip
+    xy_tol: 0.02
+    press_z: 0.025
+    rearm_z: 0.05
