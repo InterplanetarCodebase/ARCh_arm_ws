@@ -34,7 +34,7 @@ source install/setup.bash
 `GZ_VERSION=harmonic` matters: it makes `gz_ros2_control` compile against
 `gz-sim8` so its plugin actually loads inside Gazebo Harmonic.
 
-## Run
+## Run this
 
 ```bash
 # URDF viewer (sliders + RViz, no physics)
