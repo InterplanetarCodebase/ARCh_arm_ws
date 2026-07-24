@@ -1,0 +1,9 @@
+# Default initial positions for rover_arm_urdf's ros2_control fake system
+
+initial_positions:
+  joint_1_base_roll: 0
+  joint_2_shoulder_pitch: 0
+  joint_3_elbow_pitch: 0
+  joint_4_wrist_pitch: 0
+  joint_5_wrist_roll: 0
+  joint_6_left_jaw: 0

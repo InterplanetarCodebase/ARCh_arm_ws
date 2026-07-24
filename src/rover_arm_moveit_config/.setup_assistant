@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: rover_arm_urdf
+    relative_path: urdf/rover_arm_urdf.urdf
+  srdf:
+    relative_path: config/rover_arm_urdf.srdf
+  package_settings:
+    author_name: asif
+    author_email: asifmorshed09@gmail.com
+    generated_timestamp: 1784830824

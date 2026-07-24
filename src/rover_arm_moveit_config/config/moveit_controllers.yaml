@@ -1,0 +1,26 @@
+# MoveIt uses this configuration for controller management
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - arm_controller
+    - gripper_controller
+
+  arm_controller:
+    type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
+    default: true
+    joints:
+      - joint_1_base_roll
+      - joint_2_shoulder_pitch
+      - joint_3_elbow_pitch
+      - joint_4_wrist_pitch
+      - joint_5_wrist_roll
+      
+  gripper_controller:
+    type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
+    default: true
+    joints:
+      - joint_6_left_jaw
+      # The right jaw is deliberately removed here because it is a mimic joint!
