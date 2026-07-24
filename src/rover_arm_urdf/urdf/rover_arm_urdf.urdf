@@ -4,6 +4,17 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter 
 -->
 <robot name="rover_arm_urdf">
+
+<!-- Dummy link representing the Gazebo simulation world -->
+  <link name="world"/>
+
+  <!-- Fixed joint locking the base_link to the world at the origin -->
+  <joint name="fixed_to_ground" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
 <link name="base_link">
 <inertial>
 <origin xyz="2.7756E-17 5.5511E-17 0.023286" rpy="0 0 0"/>
@@ -230,4 +241,59 @@
 <mimic joint="joint_6_left_jaw" multiplier="-1" offset="0"/>
 <limit lower="-0.08" upper="0" effort="60" velocity="0.1"/>
 </joint>
+
+<!-- ros2_control block: exposes each joint as a command/state interface
+     that controller_manager (loaded via the gz_ros2_control plugin below)
+     can actually read from and write to. Without this, Gazebo has no idea
+     these joints are meant to be actively controlled, so gravity just
+     collapses them. -->
+<ros2_control name="RoverArmSystem" type="system">
+  <hardware>
+    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+  </hardware>
+  <joint name="joint_1_base_roll">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+  <joint name="joint_2_shoulder_pitch">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+  <joint name="joint_3_elbow_pitch">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+  <joint name="joint_4_wrist_pitch">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+  <joint name="joint_5_wrist_roll">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+  <joint name="joint_6_left_jaw">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+  <!-- joint_7_right_jaw is intentionally left out: it's a mimic joint,
+       driven off joint_6_left_jaw, not an independent controllable DOF. -->
+</ros2_control>
+
+<!-- Tells Gazebo Harmonic to load the gz_ros2_control plugin, which spins
+     up controller_manager inside the simulation and connects it to the
+     ros2_control block above. gazebo_launch.py substitutes the
+     placeholder below with the real resolved path at launch time, since
+     gz_ros2_control doesn't resolve package:// URIs. -->
+<gazebo>
+  <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+    <parameters>__ROS2_CONTROLLERS_YAML_PATH__</parameters>
+  </plugin>
+</gazebo>
+
 </robot>
