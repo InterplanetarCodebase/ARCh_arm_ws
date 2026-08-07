@@ -191,7 +191,7 @@
 <visual>
 <origin xyz="0 0 0" rpy="0 0 0"/>
 <geometry>
-<mesh filename="package://rover_arm_urdf/meshes/link_6_left_jaw.STL"/>
+<mesh filename="package://rover_arm_urdf/meshes/link_6_left_jaw.STL" scale="1 2 4"/>
 </geometry>
 <material name="orange">
 <color rgba="0.9 0.5 0.1 1"/>
@@ -200,7 +200,7 @@
 <collision>
 <origin xyz="0 0 0" rpy="0 0 0"/>
 <geometry>
-<mesh filename="package://rover_arm_urdf/meshes/link_6_left_jaw.STL"/>
+<mesh filename="package://rover_arm_urdf/meshes/link_6_left_jaw.STL" scale="1 2 4"/>
 </geometry>
 </collision>
 </link>
@@ -220,7 +220,7 @@
 <visual>
 <origin xyz="0 0 0" rpy="0 0 0"/>
 <geometry>
-<mesh filename="package://rover_arm_urdf/meshes/link_7_right_jaw.STL"/>
+<mesh filename="package://rover_arm_urdf/meshes/link_7_right_jaw.STL" scale="1 2 4"/>
 </geometry>
 <material name="purple">
 <color rgba="0.55 0.15 0.75 1"/>
@@ -229,7 +229,7 @@
 <collision>
 <origin xyz="0 0 0" rpy="0 0 0"/>
 <geometry>
-<mesh filename="package://rover_arm_urdf/meshes/link_7_right_jaw.STL"/>
+<mesh filename="package://rover_arm_urdf/meshes/link_7_right_jaw.STL" scale="1 2 4"/>
 </geometry>
 </collision>
 </link>
