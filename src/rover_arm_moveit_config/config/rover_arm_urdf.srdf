@@ -14,7 +14,6 @@
     </group>
     <group name="gripper">
         <joint name="joint_6_left_jaw"/>
-        <joint name="joint_7_right_jaw"/>
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="home" group="arm">
@@ -24,23 +23,83 @@
         <joint name="joint_4_wrist_pitch" value="0"/>
         <joint name="joint_5_wrist_roll" value="0"/>
     </group_state>
-    <group_state name="pose_one" group="arm">
-        <joint name="joint_1_base_roll" value="0"/>
-        <joint name="joint_2_shoulder_pitch" value="0.4857"/>
-        <joint name="joint_3_elbow_pitch" value="1.3878"/>
-        <joint name="joint_4_wrist_pitch" value="0.8587"/>
-        <joint name="joint_5_wrist_roll" value="-1.4753"/>
+    <group_state name="gripper_full_open" group="gripper">
+        <joint name="joint_6_left_jaw" value="0.045"/>
     </group_state>
-    <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
-    <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="base_link"/>
+    <group_state name="gripper_closed" group="gripper">
+        <joint name="joint_6_left_jaw" value="0"/>
+    </group_state>
+    <group_state name="gripper_half_closed" group="gripper">
+        <joint name="joint_6_left_jaw" value="0.0225"/>
+    </group_state>
+    <group_state name="touch_base" group="arm">
+        <joint name="joint_1_base_roll" value="0"/>
+        <joint name="joint_2_shoulder_pitch" value="0.6"/>
+        <joint name="joint_3_elbow_pitch" value="-0.25"/>
+        <joint name="joint_4_wrist_pitch" value="1.57"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="straight_pose" group="arm">
+        <joint name="joint_1_base_roll" value="0"/>
+        <joint name="joint_2_shoulder_pitch" value="1.57"/>
+        <joint name="joint_3_elbow_pitch" value="-2.88"/>
+        <joint name="joint_4_wrist_pitch" value="0"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="total_vertical" group="arm">
+        <joint name="joint_1_base_roll" value="0"/>
+        <joint name="joint_2_shoulder_pitch" value="1.309"/>
+        <joint name="joint_3_elbow_pitch" value="-2.88"/>
+        <joint name="joint_4_wrist_pitch" value="0"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="full_forward" group="arm">
+        <joint name="joint_1_base_roll" value="0"/>
+        <joint name="joint_2_shoulder_pitch" value="2.88"/>
+        <joint name="joint_3_elbow_pitch" value="-2.88"/>
+        <joint name="joint_4_wrist_pitch" value="0"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="pose_2" group="arm">
+        <joint name="joint_1_base_roll" value="0"/>
+        <joint name="joint_2_shoulder_pitch" value="1.8139"/>
+        <joint name="joint_3_elbow_pitch" value="-1.2411"/>
+        <joint name="joint_4_wrist_pitch" value="0"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="pose_3" group="arm">
+        <joint name="joint_1_base_roll" value="0"/>
+        <joint name="joint_2_shoulder_pitch" value="2"/>
+        <joint name="joint_3_elbow_pitch" value="-1.5"/>
+        <joint name="joint_4_wrist_pitch" value="1.57"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="pose_4" group="arm">
+        <joint name="joint_1_base_roll" value="0"/>
+        <joint name="joint_2_shoulder_pitch" value="1"/>
+        <joint name="joint_3_elbow_pitch" value="-0.5"/>
+        <joint name="joint_4_wrist_pitch" value="0"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="side_drop_off_1" group="arm">
+        <joint name="joint_1_base_roll" value="1.57"/>
+        <joint name="joint_2_shoulder_pitch" value="1.2"/>
+        <joint name="joint_3_elbow_pitch" value="-1"/>
+        <joint name="joint_4_wrist_pitch" value="0"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <group_state name="side_drop_off_2" group="arm">
+        <joint name="joint_1_base_roll" value="-1.57"/>
+        <joint name="joint_2_shoulder_pitch" value="1.2"/>
+        <joint name="joint_3_elbow_pitch" value="-1"/>
+        <joint name="joint_4_wrist_pitch" value="0"/>
+        <joint name="joint_5_wrist_roll" value="0"/>
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="gripper_ee" parent_link="link_5_gripper_base" group="gripper" parent_group="arm"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="base_link" link2="link_1_shoulder" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="link_2_upper_arm" reason="Never"/>
-    <disable_collisions link1="base_link" link2="link_3_forearm" reason="Never"/>
-    <disable_collisions link1="base_link" link2="link_4_wrist_pitch_block" reason="Never"/>
-    <disable_collisions link1="base_link" link2="link_5_gripper_base" reason="Never"/>
-    <disable_collisions link1="base_link" link2="link_6_left_jaw" reason="Never"/>
-    <disable_collisions link1="base_link" link2="link_7_right_jaw" reason="Never"/>
     <disable_collisions link1="link_1_shoulder" link2="link_2_upper_arm" reason="Adjacent"/>
     <disable_collisions link1="link_1_shoulder" link2="link_3_forearm" reason="Never"/>
     <disable_collisions link1="link_1_shoulder" link2="link_4_wrist_pitch_block" reason="Never"/>

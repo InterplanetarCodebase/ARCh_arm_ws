@@ -16,7 +16,7 @@ moveit_simple_controller_manager:
       - joint_3_elbow_pitch
       - joint_4_wrist_pitch
       - joint_5_wrist_roll
-      
+
   gripper_controller:
     type: FollowJointTrajectory
     action_ns: follow_joint_trajectory
