@@ -7,3 +7,4 @@ venv_ros/
 src/rover_arm_moveit_config_backup/
 src/rover_arm_urdf/meshes/old_meshes_backup/
 src/rover_arm_urdf/urdf/rover_arm_urdf_backup.urdf
+.~lock.*#
